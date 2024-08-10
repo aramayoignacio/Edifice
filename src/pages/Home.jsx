@@ -1,16 +1,20 @@
+import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Home = () => {
   const navigate = useNavigate();
-  const handleClickLogin = ()=>{
-    alert("vas a irte al login");
+  const logOut = ()=>{
+    localStorage.removeItem("isLogged")
     navigate("/login");
-    alert("estas en el login");
   }
   return (
     <>
-      <h1>ESTE ES EL HOME</h1>
-      <button onClick={handleClickLogin}>Ir al login</button>
+      <h1>Este es el Home</h1>
+      <Button onClick={logOut} variant="outlined">
+            Cerrar Sesión
+      </Button>
     </>
   );
 };

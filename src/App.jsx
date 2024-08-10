@@ -1,10 +1,6 @@
-import { useState } from "react";
-import reactLogo from "./assets/IMG_0767.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -18,9 +14,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  
   return <RouterProvider router={router}></RouterProvider>;
 }
 
