@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Container, Box } from "@mui/material";
-import { ShoppingCartRounded } from "@mui/icons-material";
+import LoginIcon from '@mui/icons-material/Login';
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleClickLogin = (e) => {
     e.preventDefault();
-    setError("");
 
     if (username === "mikilazo" && password === "mikilazo") {
-      localStorage.setItem("isLogged", true)
-      navigate("/");
+      localStorage.setItem("isLogged", true);
+      navigate("/buildings");
     } else {
-      setError("Usuario o contraseña incorrectos.");
+      toast.error("Usuario o contraseña incorrectos.");
     }
   };
 
@@ -47,13 +47,25 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          {error && <Typography color="error">{error}</Typography>} {/* Mensaje de error */}
           <Button type="submit" variant="outlined" color="primary" fullWidth>
             Iniciar Sesión
-            <ShoppingCartRounded sx={{marginLeft:"auto", color:""}}/>
+            <LoginIcon sx={{ marginLeft: "auto" }} />
           </Button>
         </form>
       </Box>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
     </Container>
   );
 };
