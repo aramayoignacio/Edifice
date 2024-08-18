@@ -1,0 +1,1 @@
+export const baseApiPath = import.meta.env.VITE_API_HOST;

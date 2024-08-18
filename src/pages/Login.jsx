@@ -4,21 +4,28 @@ import { TextField, Button, Typography, Container, Box } from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { login } from "../api/requests";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ username: '', password: '' });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleClickLogin = (e) => {
+  const handleClickLogin = async (e) => {
+    setLoading(true);
     e.preventDefault();
-
-    if (username === "mikilazo" && password === "mikilazo") {
-      localStorage.setItem("isLogged", true);
-      navigate("/buildings");
+    const data = await login(form);
+    if (data.success) {
+      setLoading(false);
+      localStorage.setItem("authToken", data.token);
+      const storedToken = localStorage.getItem("authToken");
+      if (storedToken) {
+        navigate('/home');
+      }
     } else {
       toast.error("Usuario o contraseña incorrectos.");
     }
+    setLoading(false);
   };
 
   return (
@@ -29,27 +36,31 @@ const Login = () => {
         </Typography>
         <form onSubmit={handleClickLogin}>
           <TextField
+            name="username"
             label="Usuario"
             variant="outlined"
             fullWidth
             margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={form.username}
+            onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })}
             required
           />
           <TextField
             label="Contraseña"
             type="password"
+            name="password"
             variant="outlined"
             fullWidth
             margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={form.password}
+            onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })}
             required
           />
-          <Button type="submit" variant="outlined" color="primary" fullWidth>
-            Iniciar Sesión
-            <LoginIcon sx={{ marginLeft: "auto" }} />
+          <Button type="submit" variant="outlined" color="primary" fullWidth disabled={loading}>
+            {loading ? "Loading..." : <>
+              Iniciar Sesión
+              <LoginIcon sx={{ marginLeft: "auto" }} />
+            </>}
           </Button>
         </form>
       </Box>
