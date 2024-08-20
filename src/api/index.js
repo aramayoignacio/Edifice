@@ -1,53 +1,36 @@
 import axios from 'axios';
 
+// Base URL de la API
 const BASE_URL = import.meta.env.VITE_API_HOST;
-const token = localStorage.getItem('authToken') || "";
 
-const handleResponse = (response) => {
-  if(response.data.statusCode === 401){
-    window.location.href = '/login';
+// Función para manejar las respuestas y errores
+const handleResponse = async (promise) => {
+  try {
+    const response = await promise;
+    return response.data;
+  } catch (error) {
+    console.error('Request failed:', error);
+    throw error;
   }
-  return { ...response.data, success: response.data.statusCode === 200 };
 };
 
-axios.interceptors.request.use((config) => {
-  if (!config.headers) config.headers = {};
-  config.headers.Authorization = Bearer ${token};
-  config.headers.Accept = "*/*";
-  return config;
-});
-
+// Funciones para hacer solicitudes HTTP
 export const get = async (resource, headers) => {
-  return axios
-    .get(${BASE_URL}/${resource}, { headers })
-    .then(handleResponse)
-    .catch(handleResponse);
+  return handleResponse(axios.get(`${BASE_URL}/${resource}`, { headers }));
 };
 
 export const post = async (resource, data, headers) => {
-  return axios
-    .post(${BASE_URL}/${resource}, data, { headers })
-    .then(handleResponse)
-    .catch(handleResponse);
+  return handleResponse(axios.post(`${BASE_URL}/${resource}`, data, { headers }));
 };
 
 export const put = async (resource, data, headers) => {
-  return axios
-    .put(${BASE_URL}/${resource}, data, { headers })
-    .then(handleResponse)
-    .catch(handleResponse);
+  return handleResponse(axios.put(`${BASE_URL}/${resource}`, data, { headers }));
 };
 
 export const patch = async (resource, data, headers) => {
-  return axios
-    .patch(${BASE_URL}/${resource}, data, { headers })
-    .then(handleResponse)
-    .catch(handleResponse);
+  return handleResponse(axios.patch(`${BASE_URL}/${resource}`, data, { headers }));
 };
 
-export const remove = async (resource, data, headers) => {
-  return axios
-    .delete(${BASE_URL}/${resource}, { data, headers })
-    .then(handleResponse)
-    .catch(handleResponse);
+export const remove = async (resource, headers) => {
+  return handleResponse(axios.delete(`${BASE_URL}/${resource}`, { headers }));
 };

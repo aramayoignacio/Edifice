@@ -1,27 +1,23 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import { TextField, Button, Typography, Container, Box } from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
-import { ToastContainer, toast, Bounce } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {  toast } from "react-toastify";
 import { login } from "../api/requests";
+import { AccountContext } from "../context/account.context";
 
 const Login = () => {
   const [form, setForm] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { setSession } = useContext(AccountContext);
 
   const handleClickLogin = async (e) => {
     setLoading(true);
     e.preventDefault();
-    const data = await login(form);
-    if (data.success) {
+    const { success, data } = await login(form);
+    if (success) {
       setLoading(false);
-      localStorage.setItem("authToken", data.token);
-      const storedToken = localStorage.getItem("authToken");
-      if (storedToken) {
-        navigate('/home');
-      }
+      setSession(() => ({ ...data, isLogged: true }))
+      toast(`Bienvenido ${data.username}`);
     } else {
       toast.error("Usuario o contraseña incorrectos.");
     }
@@ -64,19 +60,6 @@ const Login = () => {
           </Button>
         </form>
       </Box>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition={Bounce}
-      />
     </Container>
   );
 };
