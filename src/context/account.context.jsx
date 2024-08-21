@@ -28,11 +28,12 @@ const AccountContextProvider = ({ children }) => {
   }, [session]);
 
   useEffect(() => {
+    const sessionFromLocalStorage = localStorage.getItem('session');
     if (window.location.pathname === '/' && session.isLogged) {
       navigate('/home');
     }
 
-    if (!session.isLogged) {
+    if (!session.isLogged && !sessionFromLocalStorage) {
       navigate('/');
     }
   }, [navigate, session]);

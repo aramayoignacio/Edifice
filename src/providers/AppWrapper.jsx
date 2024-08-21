@@ -92,7 +92,9 @@ export default function AppWrapper() {
         </MenuItem>
       </Menu>
       <CustomModal open={addUserModal} handleClose={closeAddUserModal} children={<AddUserForm handleClose={closeAddUserModal} />} />
-      <Outlet />
+      <Box sx={{ maxWidth: "80%", marginX:"auto", marginBottom:"40px" }}>
+        <Outlet />
+      </Box>
     </Fragment>
   );
 }

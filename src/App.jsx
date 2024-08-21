@@ -8,6 +8,7 @@ import { AxiosProvider } from './providers/Axios.provider';
 import AppWrapper from './providers/AppWrapper';
 import { ToastContainer, Bounce } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import Building from './pages/Building';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route element={<AppWrapper />}>
                 <Route path="/home" element={<Home />} />
+                <Route path='/building/:buildingExternalId' element={<Building/>}/>
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
